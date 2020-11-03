@@ -1,7 +1,5 @@
 package classsctructureintegrate;
 
-import org.w3c.dom.ls.LSOutput;
-
 public class BankAccount {
     private String accountNumber;
     private String owner;
