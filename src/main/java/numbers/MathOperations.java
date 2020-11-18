@@ -7,7 +7,7 @@ public class MathOperations {
 
         String problem = "8 / (8 - 2) + 5 / (8 - 5)";
         double result = 8.0 / (8 - 2) + 5.0 / (8 - 5);
-        System.out.println(result);
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Mi a következő művelet eredménye? Négy tizedesjegy pontossággal kérem.");
