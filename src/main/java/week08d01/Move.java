@@ -2,28 +2,31 @@ package week08d01;
 
 public enum Move {
     F{
-        public Position move(Position position){
-            this.y = position.getY() + 1;
-            return position;
+        @Override
+        public void step(Position position){
+            position.setY(position.getY()+1);
         }
-    }
+    },
     L{
-        public Position move(Position position){
-            this.y = position.getY() - 1;
+        @Override
+        public void step(Position position) {
+            position.setY(position.getY() -1);
         }
-    }
+    },
 
     J{
-        public Position move(Position position){
-            this.x = position.getX() + 1;
-            return position;
+        @Override
+        public void step(Position position){
+            position.setX(position.getX() +1);
         }
-    }
+    },
 
     B{
-        public Position move(Position position){
-            this.x = position.getX() - 1;
-            return position;
+        @Override
+        public void step(Position position) {
+            position.setX(position.getX() - 1);
+
         }
-    }
+    };
+    public abstract void step();
 }
