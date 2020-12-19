@@ -18,12 +18,20 @@ public class Position {
         return y;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void increaseX() {
+        x++;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void decreaseX(){
+        x--;
+    }
+
+    public void increaseY() {
+        y++;
+    }
+
+    public void decreaseY(){
+        y--;
     }
 }
 
