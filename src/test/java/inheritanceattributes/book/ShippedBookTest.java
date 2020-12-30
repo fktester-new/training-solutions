@@ -30,6 +30,12 @@ public class ShippedBookTest {
         ShippedBook shippedBook = new ShippedBook("Gyűrűk ura", 3000, 1000);
 
         assertEquals("Book data: Title: Gyűrűk ura, Price: 3000, Shipping cost: 1000", shippedBook.toString());
+    }
 
+    @Test
+    public void purchaseTest(){
+        ShippedBook shippedBook = new ShippedBook("Gyűrűk ura", 3000, 1000);
+
+        assertEquals(6000, shippedBook.purchase(2));
     }
 }
