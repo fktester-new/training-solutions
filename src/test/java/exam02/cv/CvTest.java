@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CvTest {
 
-    @Test
+   @Test
     public void testCreateWithName() {
         Cv cv1 = new Cv("John Doe");
         assertEquals("John Doe", cv1.getName());
@@ -34,7 +34,7 @@ public class CvTest {
     @Test
     public void testNotFoundSkill() {
         Cv cv1 = new Cv("John Doe");
-        assertThrows(SkillNotFoundException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> cv1.findSkillLevelByName("programming"));
 
     }
