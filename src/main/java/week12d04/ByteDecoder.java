@@ -45,7 +45,7 @@ public class ByteDecoder {
             byte[] buffer = new byte[10];
             int size;
             while((size = is.read(buffer)) > 0){
-                System.out.println(size);
+                //System.out.println(size);
                 for (int i = 0; i < size; i++){
                     char c = (char) (buffer[i] + 10);
                     os.write(c);
