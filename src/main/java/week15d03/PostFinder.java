@@ -3,6 +3,7 @@ package week15d03;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PostFinder {
 
@@ -16,14 +17,12 @@ public class PostFinder {
         return postItems;
     }
     public List<Post> findPostsFor(String user) {
-        if (postItems == null) {
-            throw new IllegalArgumentException("Wrong input data!");
-        }
+        Objects.requireNonNull(user, "User is null!");
+        Objects.requireNonNull(postItems, "The list of postItems is null!");
+
         List<Post> result = new ArrayList<>();
         for (Post post : postItems) {
-            if (!postHasData(post)) {
-                throw new IllegalArgumentException("At least one of the input parameters is empty or null!");
-            }
+            isNotNullOrEmpty(post);
             if(postValidator(post, user)){
                 result.add(post);
             }
@@ -31,28 +30,26 @@ public class PostFinder {
         return result;
     }
 
-    private boolean postHasData(Post post){
+    private boolean isNotNullOrEmpty(Post post){
+        Objects.requireNonNull(post.getTitle(), "The title is null!");
+        Objects.requireNonNull(post.getPublishedAt(), "The date of publishing is null!");
+        Objects.requireNonNull(post.getContent(), "The content is null!");
+        Objects.requireNonNull(post.getOwner(), "The owner is null!");
 
-        if (post.getTitle().isBlank()  || post.getTitle() == null){
-            return false;
+        if (post.getTitle().isBlank()){
+            throw new IllegalArgumentException("The title is empty!");
         }
-        if (post.getPublishedAt() == null){
-            return false;
+        if (post.getContent().isBlank()) {
+            throw new IllegalArgumentException("The content is empty!");
         }
-        if (post.getContent().isBlank() || post.getContent() == null) {
-            return false;
-        }
-        if (post.getOwner().isBlank() || post.getOwner() == null){
-            return false;
+        if (post.getOwner().isBlank()){
+            throw new IllegalArgumentException("The owner is empty!");
         }
         return true;
     }
 
     private boolean postValidator(Post post, String user){
 
-        if (user.equals(post.getOwner()) && post.getPublishedAt().isBefore(LocalDate.now())){
-          return true;
-        }
-        return false;
+        return (user.equals(post.getOwner()) && post.getPublishedAt().isBefore(LocalDate.now()));
     }
 }

@@ -17,9 +17,10 @@ class PostFinderTest {
     Post post4 = new Post("aab", LocalDate.of(2021, 02, 5), "mail", "Jane");
     Post post5 = new Post("bbc", LocalDate.of(2021, 02, 9), "certified_mail", "Joe");
     Post post6 = new Post("abd", LocalDate.of(2021, 03, 2), "parcel", "Nobody");
-    Post post7 = new Post("dfg", LocalDate.of(2021, 02, 21), "mail", "Nobody");
-    Post post8 = new Post("asd", LocalDate.of(2021, 02, 10), "mail", null);
-    Post post9 = null;
+    Post post7 = new Post("", LocalDate.of(2021, 02, 21), "mail", "Nobody");
+    Post post8 = new Post("asd", LocalDate.of(2021, 02, 10), "mail", "  ");
+    Post post9 = new Post("asd", LocalDate.of(2021, 02, 10), "mail", null);
+    Post post10 = null;
 
     @Test
     public void testFindPostFor() {
@@ -38,9 +39,25 @@ class PostFinderTest {
         List<Post> result = pf.findPostsFor("John");
         assertEquals(0, result.size());
 
-        List<Post> wrongItems = List.of(post6, post7);
+        List<Post> wrongItems = List.of(post5, post6);
         PostFinder wrong = new PostFinder(wrongItems);
         List<Post> result2 = wrong.findPostsFor("Nobody");
         assertEquals(0, result2.size());
     }
+
+    @Test
+    public void testWrongInput(){
+        List<Post> wrongItems = List.of(post7, post8);
+        PostFinder wrong = new PostFinder(wrongItems);
+        assertThrows(IllegalArgumentException.class, () -> wrong.findPostsFor("Nobody"));
+    }
+
+    @Test
+    public void testNullInput(){
+        List<Post> nulls = List.of(post9);
+        PostFinder nullItem = new PostFinder(nulls);
+        NullPointerException ex = assertThrows(NullPointerException.class, () -> nullItem.findPostsFor("Joe"));
+        assertEquals("The owner is null!", ex.getMessage());
+    }
+
 }
