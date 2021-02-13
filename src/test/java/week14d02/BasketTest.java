@@ -44,4 +44,10 @@ class BasketTest {
         basket.readFileToMap("shopping_list.txt");
         assertEquals(2, basket.stat().get("tomato"));
     }
+
+    @Test
+    public void testSortedStat(){
+        basket.readFileToMap("shopping_list.txt");
+        assertEquals("apple", basket.sortedStat().keySet().toArray()[0]);
+    }
 }

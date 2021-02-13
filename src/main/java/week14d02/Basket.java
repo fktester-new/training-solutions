@@ -74,6 +74,20 @@ public class Basket {
         return statItem;
     }
 
+    public Map<String, Integer> sortedStat() {
+        TreeSet<String> items = new TreeSet<>();
+        Map<String, Integer> statItem = new LinkedHashMap<>();
+        for (List<String> list : products.values()) {
+            for(String s: list) {
+                items.add(s);
+            }
+        }
+        for(String s: items) {
+            statItem.put(s, countProduct(s));
+        }
+        return statItem;
+    }
+
     public Map<String, List<String>> getProducts() {
         return products;
     }
@@ -84,6 +98,7 @@ public class Basket {
         System.out.println(basket.countProduct("beer"));
         System.out.println(basket.getNumberOfGoods("W34111"));
         System.out.println(basket.stat().toString());
+        System.out.println(basket.sortedStat().toString());
     }
 
 }
