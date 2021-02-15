@@ -2,6 +2,7 @@ package exam03;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Cruise {
@@ -35,6 +36,15 @@ public class Cruise {
             }
         }
         throw new IllegalArgumentException("The name is not found!");
+    }
+
+    public List<String> getPassengerNamesOrdered(){
+        List<String> result = new ArrayList<>();
+        for (Passenger passenger : passengers) {
+            result.add(passenger.getName());
+        }
+        Collections.sort(result);
+        return result;
     }
 
     public Boat getBoat() {
