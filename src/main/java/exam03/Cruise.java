@@ -28,6 +28,15 @@ public class Cruise {
         return passenger.getCruiseClass().getValue() * basicPrice;
     }
 
+    public Passenger findPassengerByName(String name){
+        for (Passenger passenger : passengers) {
+            if (name.equals(passenger.getName())){
+                return passenger;
+            }
+        }
+        throw new IllegalArgumentException("The name is not found!");
+    }
+
     public Boat getBoat() {
         return boat;
     }

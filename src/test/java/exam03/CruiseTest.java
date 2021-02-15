@@ -51,7 +51,7 @@ public class CruiseTest {
         assertEquals(100_000, price, 0.5);
     }
 
-    /*@Test
+    @Test
     void findPassengerByName() {
         cruise.bookPassenger(new Passenger("John Doe", CruiseClass.LUXURY));
         cruise.bookPassenger(new Passenger("Jack Doe", CruiseClass.FIRST));
@@ -60,7 +60,7 @@ public class CruiseTest {
         assertEquals("Jack Doe", passenger.getName());
     }
 
-    @Test
+    /*@Test
     void getPassengerNamesOrdered() {
         cruise.bookPassenger(new Passenger("Jack Smith", CruiseClass.FIRST));
         cruise.bookPassenger(new Passenger("John Doe", CruiseClass.LUXURY));
