@@ -1,9 +1,7 @@
 package exam03;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Cruise {
 
@@ -25,20 +23,20 @@ public class Cruise {
         passengers.add(passenger);
     }
 
-    public double getPriceForPassenger(Passenger passenger){
+    public double getPriceForPassenger(Passenger passenger) {
         return passenger.getCruiseClass().getValue() * basicPrice;
     }
 
-    public Passenger findPassengerByName(String name){
+    public Passenger findPassengerByName(String name) {
         for (Passenger passenger : passengers) {
-            if (name.equals(passenger.getName())){
+            if (name.equals(passenger.getName())) {
                 return passenger;
             }
         }
         throw new IllegalArgumentException("The name is not found!");
     }
 
-    public List<String> getPassengerNamesOrdered(){
+    public List<String> getPassengerNamesOrdered() {
         List<String> result = new ArrayList<>();
         for (Passenger passenger : passengers) {
             result.add(passenger.getName());
@@ -47,13 +45,25 @@ public class Cruise {
         return result;
     }
 
-    public double sumAllBookingsCharged(){
+    public double sumAllBookingsCharged() {
         double sum = 0.0;
         for (Passenger passenger : passengers) {
             sum += getPriceForPassenger(passenger);
         }
         return sum;
     }
+
+    public Map<CruiseClass, Integer> countPassengerByClass() {
+        Map<CruiseClass, Integer> report = new HashMap<>();
+        for (Passenger passenger : passengers) {
+            if (!report.containsKey(passenger.getCruiseClass())) {
+                report.put(passenger.getCruiseClass(), 0);
+            }
+            report.put(passenger.getCruiseClass(), report.get(passenger.getCruiseClass()) + 1);
+        }
+        return report;
+    }
+
 
     public Boat getBoat() {
         return boat;
@@ -70,4 +80,6 @@ public class Cruise {
     public List<Passenger> getPassengers() {
         return passengers;
     }
+
+
 }
