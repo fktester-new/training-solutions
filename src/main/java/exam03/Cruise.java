@@ -24,6 +24,10 @@ public class Cruise {
         passengers.add(passenger);
     }
 
+    public double getPriceForPassenger(Passenger passenger){
+        return passenger.getCruiseClass().getValue() * basicPrice;
+    }
+
     public Boat getBoat() {
         return boat;
     }

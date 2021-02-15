@@ -39,7 +39,7 @@ public class CruiseTest {
                 () -> cruise.bookPassenger(new Passenger("John Doe", CruiseClass.LUXURY)));
     }
 
-    /*@Test
+    @Test
     void getPriceForPassenger() {
         double price = cruise.getPriceForPassenger(new Passenger("John Doe", CruiseClass.LUXURY));
         assertEquals(300_000, price, 0.5);
@@ -51,7 +51,7 @@ public class CruiseTest {
         assertEquals(100_000, price, 0.5);
     }
 
-    @Test
+    /*@Test
     void findPassengerByName() {
         cruise.bookPassenger(new Passenger("John Doe", CruiseClass.LUXURY));
         cruise.bookPassenger(new Passenger("Jack Doe", CruiseClass.FIRST));
