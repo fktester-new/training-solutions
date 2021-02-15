@@ -47,6 +47,14 @@ public class Cruise {
         return result;
     }
 
+    public double sumAllBookingsCharged(){
+        double sum = 0.0;
+        for (Passenger passenger : passengers) {
+            sum += getPriceForPassenger(passenger);
+        }
+        return sum;
+    }
+
     public Boat getBoat() {
         return boat;
     }

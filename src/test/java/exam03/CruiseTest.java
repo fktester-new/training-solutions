@@ -70,7 +70,7 @@ public class CruiseTest {
         assertEquals(List.of("Jack Doe", "Jack Smith", "John Doe"), names);
     }
 
-    /*@Test
+    @Test
     void sumAllBookingsCharged() {
         cruise.bookPassenger(new Passenger("Jack Smith", CruiseClass.LUXURY));
         cruise.bookPassenger(new Passenger("John Doe", CruiseClass.FIRST));
@@ -80,7 +80,7 @@ public class CruiseTest {
         assertEquals(300_000 + 180_000 + 100_000, sum, 0.5);
     }
 
-    @Test
+    /*@Test
     void countPassengerByClass() {
         cruise.bookPassenger(new Passenger("Jack Smith", CruiseClass.LUXURY));
         cruise.bookPassenger(new Passenger("John Doe", CruiseClass.LUXURY));
