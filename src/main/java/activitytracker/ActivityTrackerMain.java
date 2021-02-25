@@ -24,16 +24,17 @@ public class ActivityTrackerMain {
         }
     }
 
-    private Activity selectActivityByPreparedStatement(PreparedStatement stmt){
+    private List<Activity> selectActivityByPreparedStatement(PreparedStatement stmt){
+        List<Activity> result = new ArrayList<>();
         try (ResultSet rs = stmt.executeQuery()){
-            if (rs.next()){
+            while(rs.next()){
                 Activity activity = new Activity(rs.getLong("id"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
                         rs.getString("activity_desc"),
                         ActivityType.valueOf(rs.getString("activity_type")));
-                return activity;
+                result.add(activity);
             }
-            throw new IllegalArgumentException("Wrong input!");
+            return result;
         } catch (SQLException se){
             throw new IllegalStateException("Cannot execute", se);
         }
@@ -64,7 +65,12 @@ public class ActivityTrackerMain {
                 conn.prepareStatement("select * from activities where id = ?")){
             stmt.setLong(1, id);
 
-            return selectActivityByPreparedStatement(stmt);
+            List<Activity> result = selectActivityByPreparedStatement(stmt);
+
+            if (result.size() == 1){
+                return result.get(0);
+            }
+            throw new IllegalArgumentException("Wrong id!");
         }
         catch (SQLException se){
             throw new IllegalStateException("Can not connect!", se);
