@@ -43,16 +43,9 @@ public class ActivityTrackerMain {
     public List<Activity> selectAllActivities(DataSource dataSource){
         List<Activity> result = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement("select *  from activities");
-             ResultSet rs = ps.executeQuery()){
-            while(rs.next()){
-                Activity activity = new Activity(rs.getLong("id"),
-                        rs.getTimestamp("start_time").toLocalDateTime(),
-                        rs.getString("activity_desc"),
-                        ActivityType.valueOf(rs.getString("activity_type")));
-                result.add(activity);
-            }
-            return result;
+             PreparedStatement ps = conn.prepareStatement("select *  from activities")){
+
+            return selectActivityByPreparedStatement(ps);
         } catch (SQLException se){
             throw new IllegalStateException("Connection failed!", se);
         }
