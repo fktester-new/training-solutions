@@ -1,5 +1,6 @@
 package activitytracker;
 
+import org.flywaydb.core.Flyway;
 import org.mariadb.jdbc.MariaDbDataSource;
 
 import javax.sql.DataSource;
@@ -10,65 +11,7 @@ import java.util.List;
 
 public class ActivityTrackerMain {
 
-    public void insertActivity(DataSource dataSource, Activity activity) {
-        try (
-                Connection conn = dataSource.getConnection();
-                PreparedStatement stmt =
-                        conn.prepareStatement("INSERT INTO activities(start_time, activity_desc, activity_type) VALUES (?, ?, ?)")) {
-            stmt.setTimestamp(1, Timestamp.valueOf(activity.getStartTime()));
-            stmt.setString(2, activity.getDesc());
-            stmt.setString(3, activity.getType().toString());
-            stmt.executeUpdate();
-        } catch (SQLException se) {
-            throw new IllegalStateException("Can not insert", se);
-        }
-    }
 
-    private List<Activity> selectActivityByPreparedStatement(PreparedStatement stmt){
-        List<Activity> result = new ArrayList<>();
-        try (ResultSet rs = stmt.executeQuery()){
-            while(rs.next()){
-                Activity activity = new Activity(rs.getLong("id"),
-                        rs.getTimestamp("start_time").toLocalDateTime(),
-                        rs.getString("activity_desc"),
-                        ActivityType.valueOf(rs.getString("activity_type")));
-                result.add(activity);
-            }
-            return result;
-        } catch (SQLException se){
-            throw new IllegalStateException("Cannot execute", se);
-        }
-    }
-
-    public List<Activity> selectAllActivities(DataSource dataSource){
-        List<Activity> result = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement("select *  from activities")){
-
-            return selectActivityByPreparedStatement(ps);
-        } catch (SQLException se){
-            throw new IllegalStateException("Connection failed!", se);
-        }
-    }
-
-    public Activity selectActivityById(DataSource dataSource, long id){
-        try (
-                Connection conn = dataSource.getConnection();
-        PreparedStatement stmt =
-                conn.prepareStatement("select * from activities where id = ?")){
-            stmt.setLong(1, id);
-
-            List<Activity> result = selectActivityByPreparedStatement(stmt);
-
-            if (result.size() == 1){
-                return result.get(0);
-            }
-            throw new IllegalArgumentException("Wrong id!");
-        }
-        catch (SQLException se){
-            throw new IllegalStateException("Can not connect!", se);
-        }
-    }
 
     public static void main(String[] args) {
 
@@ -82,16 +25,17 @@ public class ActivityTrackerMain {
             throw new IllegalStateException("can not create datasource", se);
         }
 
-        Activity activity = new Activity(LocalDateTime.of(2021, 02, 23, 10, 22), "Biking in Bakony", ActivityType.BIKING);
-        Activity activity2 = new Activity(LocalDateTime.of(2021, 02, 23, 10, 22), "Hiking in Bakony", ActivityType.HIKING);
-        Activity activity3 = new Activity(LocalDateTime.of(2021, 02, 23, 10, 22), "Running in Bakony", ActivityType.RUNNING);
+        //Activity activity = new Activity(LocalDateTime.of(2021, 02, 23, 10, 22), "Biking in Bakony", ActivityType.BIKING);
+        //Activity activity2 = new Activity(LocalDateTime.of(2021, 02, 23, 10, 22), "Hiking in Bakony", ActivityType.HIKING);
+        //Activity activity3 = new Activity(LocalDateTime.of(2021, 02, 23, 10, 22), "Running in Bakony", ActivityType.RUNNING);
 
-        ActivityTrackerMain atm = new ActivityTrackerMain();
+        ActivityDao activityDao = new ActivityDao(dataSource);
 
-        atm.insertActivity(dataSource, activity);
-        atm.insertActivity(dataSource, activity2);
-        atm.insertActivity(dataSource, activity3);
-        System.out.println(atm.selectActivityById(dataSource, 2));
-        System.out.println(atm.selectAllActivities(dataSource));
+        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
+        flyway.clean();
+        flyway.migrate();
+
+        System.out.println(activityDao.selectActivityById(2));
+        System.out.println(activityDao.selectAllActivitiesByType(ActivityType.BIKING));
     }
 }
