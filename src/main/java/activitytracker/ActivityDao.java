@@ -2,6 +2,8 @@ package activitytracker;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,17 +15,50 @@ public class ActivityDao {
         this.dataSource = dataSource;
     }
 
-    public void insertActivity(Activity activity) {
+    public Activity insertActivity(Activity activity) {
         try (
                 Connection conn = dataSource.getConnection();
                 PreparedStatement stmt =
-                        conn.prepareStatement("INSERT INTO activities(start_time, activity_desc, activity_type) VALUES (?, ?, ?)")) {
+                        conn.prepareStatement("INSERT INTO activities(start_time, activity_desc, activity_type) VALUES (?, ?, ?)",Statement.RETURN_GENERATED_KEYS)) {
+
             stmt.setTimestamp(1, Timestamp.valueOf(activity.getStartTime()));
             stmt.setString(2, activity.getDesc());
             stmt.setString(3, activity.getType().toString());
             stmt.executeUpdate();
+
+            return getIdAfterExecuted(activity, stmt);
         } catch (SQLException se) {
             throw new IllegalStateException("Can not insert", se);
+        }
+    }
+
+    private Activity getIdAfterExecuted(Activity activity, PreparedStatement stmt) {
+        try (
+                ResultSet rs = stmt.getGeneratedKeys();
+                ){
+            if (rs.next()){
+                long id = rs.getLong(1);
+                 return new Activity(id, activity.getStartTime(), activity.getDesc(), activity.getType());
+
+            } else {
+                throw new IllegalStateException("Cannot get keys!");
+            }
+        } catch (SQLException sqle) {
+            throw new IllegalStateException("Cannot connect", sqle);
+        }
+    }
+
+    public List<Activity> selectActivityBeforeDate(LocalDate date){
+        try(Connection conn = dataSource.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("select * from activities where start_time < ?")){
+
+            LocalDateTime actualDate = date.atTime(0,0);
+
+            stmt.setTimestamp(1, Timestamp.valueOf(actualDate));
+
+            return selectActivityByPreparedStatement(stmt);
+        } catch (SQLException sqle){
+            throw new IllegalStateException("Cannot connect!", sqle);
         }
     }
 
