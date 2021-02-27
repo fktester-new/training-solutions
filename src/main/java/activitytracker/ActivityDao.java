@@ -26,9 +26,11 @@ public class ActivityDao {
             stmt.setString(3, activity.getType().toString());
             stmt.executeUpdate();
 
-            return getIdAfterExecuted(activity, stmt);
+            Activity result = getIdAfterExecuted(activity, stmt);
+            insertActivitytrackPoints(activity.getTrackPoints(), result.getId());
+            return result;
         } catch (SQLException se) {
-            throw new IllegalStateException("Can not insert", se);
+            throw new IllegalStateException("Can not connect", se);
         }
     }
 
@@ -46,6 +48,39 @@ public class ActivityDao {
         } catch (SQLException sqle) {
             throw new IllegalStateException("Cannot connect", sqle);
         }
+    }
+
+    private void insertActivitytrackPoints(List<TrackPoint> trackPoints, long activityId){
+        try(Connection conn = dataSource.getConnection()){
+            conn.setAutoCommit(false);
+            try(PreparedStatement stmt = conn.prepareStatement("insert into track_points(act_time, lat, lon, activityId) values(?, ?, ?, ?)")){
+                for (TrackPoint trackPoint: trackPoints){
+                    if(!isValidLatLon(trackPoint.getLat(), trackPoint.getLon())){
+                        throw new IllegalArgumentException("Invalid lat or lon!");
+                    }
+                    stmt.setDate(1, Date.valueOf(trackPoint.getTime()));
+                    stmt.setDouble(2, trackPoint.getLat());
+                    stmt.setDouble(3, trackPoint.getLon());
+                    stmt.setLong(4, activityId);
+                    stmt.executeUpdate();
+                }
+                conn.commit();
+            }catch (IllegalArgumentException iae){
+                conn.rollback();
+            }
+        }catch (SQLException sqle){
+            throw new IllegalStateException("Cannot connect!", sqle);
+        }
+    }
+
+    private boolean isValidLatLon(double lat, double lon){
+        if (lat > 90 || lat < -90){
+            return false;
+        }
+        if (lon > 180 || lon < -180){
+            return false;
+        }
+        return true;
     }
 
     public List<Activity> selectActivityBeforeDate(LocalDate date){

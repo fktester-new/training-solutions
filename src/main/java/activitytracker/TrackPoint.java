@@ -16,6 +16,12 @@ public class TrackPoint {
         this.lon = lon;
     }
 
+    public TrackPoint(LocalDate time, double lat, double lon) {
+        this.time = time;
+        this.lat = lat;
+        this.lon = lon;
+    }
+
     public long getId() {
         return id;
     }
@@ -30,5 +36,15 @@ public class TrackPoint {
 
     public double getLon() {
         return lon;
+    }
+
+    @Override
+    public String toString() {
+        return "TrackPoint{" +
+                "id=" + id +
+                ", time=" + time +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                '}';
     }
 }

@@ -1,6 +1,8 @@
 package activitytracker;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Activity {
 
@@ -8,6 +10,7 @@ public class Activity {
     private LocalDateTime startTime;
     private String desc;
     private ActivityType type;
+    private List<TrackPoint> trackPoints = new ArrayList<>();
 
     public Activity(long id, LocalDateTime startTime, String desc, ActivityType type) {
         this.id = id;
@@ -25,6 +28,14 @@ public class Activity {
         this.type = type;
     }
 
+    public void addTrackPoint(TrackPoint tp){
+        trackPoints.add(tp);
+    }
+
+    public void addTrackPoints(List<TrackPoint> points){
+        trackPoints.addAll(points);
+    }
+
     public long getId() {
         return id;
     }
@@ -39,6 +50,10 @@ public class Activity {
 
     public ActivityType getType() {
         return type;
+    }
+
+    public List<TrackPoint> getTrackPoints() {
+        return new ArrayList<>(trackPoints);
     }
 
     @Override
