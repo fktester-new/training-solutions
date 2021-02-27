@@ -113,6 +113,23 @@ public class ActivityDao {
         }
     }
 
+
+    private List<TrackPoint> selectTrackPointByPreparedStatement(PreparedStatement stmt) {
+        List<TrackPoint> result = new ArrayList<>();
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                TrackPoint trackPoint = new TrackPoint(rs.getLong("id"),
+                        rs.getDate("act_time").toLocalDate(),
+                        rs.getDouble("lat"),
+                        rs.getDouble("lon"));
+                result.add(trackPoint);
+            }
+            return result;
+        } catch (SQLException se) {
+            throw new IllegalStateException("Cannot execute", se);
+        }
+    }
+
     public List<Activity> selectAllActivities() {
 
         try (Connection conn = dataSource.getConnection();
@@ -128,12 +145,17 @@ public class ActivityDao {
         try (
                 Connection conn = dataSource.getConnection();
                 PreparedStatement stmt =
-                        conn.prepareStatement("select * from activities where id = ?")) {
+                        conn.prepareStatement("select * from activities where id = ?");
+                PreparedStatement stmt2 =
+                        conn.prepareStatement("select * from track_points where activityId = ?")) {
             stmt.setLong(1, id);
 
             List<Activity> result = selectActivityByPreparedStatement(stmt);
 
             if (result.size() == 1) {
+                stmt2.setLong(1, id);
+                List<TrackPoint> resultPoints = selectTrackPointByPreparedStatement(stmt2);
+                result.get(0).addTrackPoints(resultPoints);
                 return result.get(0);
             }
             throw new IllegalArgumentException("Wrong id!");

@@ -68,6 +68,18 @@ class ActivityDaoTest {
                 new TrackPoint(LocalDate.of(2021, 2, 23), 68, 33),
                 new TrackPoint(LocalDate.of(2021, 2, 23), 68, 32)));
 
-        activityDao.insertActivity(activity);
+        Activity ac = activityDao.insertActivity(activity);
+        System.out.println(activityDao.selectActivityById(ac.getId()));
+    }
+
+    @Test
+    public void testRollbackByWrongInput(){
+        Activity activity = new Activity(LocalDateTime.of(2021, 02, 23, 10, 22), "Biking in Bakony", ActivityType.BIKING);
+        activity.addTrackPoints(List.of(
+                new TrackPoint(LocalDate.of(2021, 2, 23), 67, 34),
+                new TrackPoint(LocalDate.of(2021, 2, 23), 68, 193),
+                new TrackPoint(LocalDate.of(2021, 2, 23), 68, 32)));
+        Activity ac = activityDao.insertActivity(activity);
+        System.out.println(activityDao.selectActivityById(ac.getId()));
     }
 }
