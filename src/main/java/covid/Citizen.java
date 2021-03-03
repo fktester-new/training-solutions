@@ -2,7 +2,7 @@ package covid;
 
 import java.time.LocalDate;
 
-public class Citizens {
+public class Citizen {
 
     private long citizen_id;
     private String citizen_name;
@@ -13,7 +13,7 @@ public class Citizens {
     private long number_of_vaccination;
     private LocalDate last_vaccination;
 
-    public Citizens(String citizen_name, String zip, long age, String email, String taj) {
+    public Citizen(String citizen_name, String zip, long age, String email, String taj) {
         this.citizen_name = citizen_name;
         this.zip = zip;
         this.age = age;

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Controller {
 
-    private Validator validator;
+    private Validator validator = new Validator();
 
 
     public  void printMenu(){
@@ -26,7 +26,7 @@ public class Controller {
 
         switch(menuItem){
             case 1:
-                Validator.validateRegistration();
+                validator.validateRegistration();
                 break;
             case 2:
                 //massRegistration();
@@ -41,7 +41,7 @@ public class Controller {
                 //vaccinationFailure();
                 break;
             case 6:
-                Validator.generateReport();
+                validator.generateReport();
                 break;
             case 7:
                 System.out.println("Viszontlátásra!");
