@@ -19,7 +19,7 @@ public class Citizen {
         this.age = age;
         this.email = email;
         this.taj = taj;
-        number_of_vaccination = 0;
+        this.number_of_vaccination = 0;
     }
 
     public long getCitizen_id() {

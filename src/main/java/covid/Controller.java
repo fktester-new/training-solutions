@@ -5,6 +5,7 @@ import org.mariadb.jdbc.MariaDbDataSource;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Controller {
@@ -25,39 +26,22 @@ public class Controller {
         "7. Kilépés \n");
     }
 
-    public CovidDao startMenu() {
-        MariaDbDataSource dataSource;
-        try {
-            dataSource = new MariaDbDataSource();
-            dataSource.setUrl("jdbc:mariadb://localhost:3306/covid?useUnicode=true");
-            dataSource.setUser("covid");
-            dataSource.setPassword("covid");
-        } catch (SQLException se) {
-            throw new IllegalStateException("can not create datasource", se);
-        }
 
-        CovidDao covidDao = new CovidDao(dataSource);
 
-        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
-        flyway.clean();
-        flyway.migrate();
-        return covidDao;
-    }
-
-        public void runMenu(){
+        public void runMenu(CovidDao covidDao){
         printMenu();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Válasszon menüpontot:");
         String menuItem = scanner.nextLine();
-        startMenu();
-        switch(menuItem){
 
+        switch(menuItem){
             case "1":
                 Citizen citizen = validator.validateRegistration();
-
+                covidDao.insertCitizen(citizen);
                 break;
             case "2":
-                //massRegistration();
+                List<Citizen> citizens = validator.importCsvFile();
+                covidDao.massRegistration(citizens);
                 break;
             case "3":
                 //massRegistration();
@@ -85,9 +69,23 @@ public class Controller {
 
     public static void main(String[] args) {
         Controller controller = new Controller();
+        MariaDbDataSource dataSource;
+        try {
+            dataSource = new MariaDbDataSource();
+            dataSource.setUrl("jdbc:mariadb://localhost:3306/covid?useUnicode=true");
+            dataSource.setUser("covid");
+            dataSource.setPassword("covid");
+        } catch (SQLException se) {
+            throw new IllegalStateException("can not create datasource", se);
+        }
 
+        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
+        flyway.clean();
+        flyway.migrate();
 
-        controller.runMenu();
+        CovidDao covidDao = new CovidDao(dataSource);
+
+        controller.runMenu(covidDao);
     }
 
 }

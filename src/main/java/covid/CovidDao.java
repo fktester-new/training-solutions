@@ -4,6 +4,7 @@ import activitytracker.Activity;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.List;
 
 public class CovidDao {
 
@@ -17,7 +18,7 @@ public class CovidDao {
         try (
                 Connection conn = dataSource.getConnection();
                 PreparedStatement stmt =
-                        conn.prepareStatement("INSERT INTO citizens(citizen_name, zip, age, email, taj,number_of_vaccinations) VALUES (?, ?, ?, ?, ?, ?)")) {
+                        conn.prepareStatement("INSERT INTO citizens(citizen_name, zip, age, email, taj,number_of_vaccination) VALUES (?, ?, ?, ?, ?, ?)")) {
 
             stmt.setString(1, citizen.getCitizen_name());
             stmt.setString(2, citizen.getZip());
@@ -30,6 +31,13 @@ public class CovidDao {
         } catch (SQLException se) {
             throw new IllegalStateException("Can not connect", se);
         }
+    }
+
+    public void massRegistration(List<Citizen> citizens){
+        for (Citizen citizen : citizens) {
+            insertCitizen(citizen);
+        }
+        System.out.println("A tömeges regisztráció megtörtént!");
     }
 
 }

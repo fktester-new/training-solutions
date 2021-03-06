@@ -1,5 +1,11 @@
 package covid;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Validator {
@@ -55,12 +61,64 @@ public class Validator {
         }
         System.out.println("Sikeres regisztráció!");
         Citizen citizen = new Citizen(name, zip, age, email, taj);
-        //System.out.println(citizen.getCitizen_name());
-        //System.out.println(citizen.getTaj());
-        return citizen;
-        //insertCitizen(citizen);
 
+        return citizen;
     }
+
+    public List<Citizen> importCsvFile(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Adja meg a beolvasandó csv fájl nevét!");
+        String fileName = scanner.nextLine();
+        while(fileName.isEmpty()){
+            System.out.println("Nem adott meg fájlnevet!");
+            System.out.println("Adja meg most!");
+            fileName = scanner.nextLine();
+        }
+        Path path = Path.of(fileName);
+        List<Citizen> citizens = fileReader(path);
+        return citizens;
+    }
+
+    private List<Citizen> fileReader(Path path) {
+        List<Citizen> result;
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            result = new Validator().readLines(reader);
+        } catch (IOException ioe) {
+            throw new IllegalStateException("Can not read file", ioe);
+        }
+        return result;
+    }
+
+    public List<Citizen> readLines(BufferedReader reader) throws IOException {
+        List<Citizen> result = new ArrayList<>();
+        String line;
+        reader.readLine();
+        int lineNr = 1;
+        while ((line = reader.readLine())  != null) {
+            lineNr++;
+            Citizen citizen = parseLine(line);
+            if(citizen == null){
+                System.out.println("Hibás adatok a(z) " + lineNr + ".sorban!");
+            } else {
+                result.add(citizen);
+            }
+        }
+        return result;
+    }
+
+    private Citizen parseLine(String line) {
+        String[] data = line.split(";");
+        String name = data[0];
+        String zip = data[1];
+        long age = Long.parseLong(data[2]);
+        String email = data[3];
+        String taj = data[4];
+        Citizen citizen = null;
+        if (name != null && zip != null && age > 10 && age < 150 && validateEmail(email) && validateTaj(taj)){
+            citizen = new Citizen(name, zip, age, email, taj);
+        }
+        return citizen;
+        }
 
     public String generateReport() {
         String r = "Maybe later!";
