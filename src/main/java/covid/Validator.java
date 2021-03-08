@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Validator {
@@ -120,11 +121,30 @@ public class Validator {
         return citizen;
         }
 
-    public String generateReport() {
-        String r = "Maybe later!";
-        System.out.println(r);
-        return r;
-    }
+     public String generateReport(){
+        Scanner scanner = new Scanner(System.in);
+         System.out.println("Adja meg az irányítószámot:");
+         String zip = scanner.nextLine();
+         while(zip.isEmpty()){
+             System.out.println("Nem adott meg irányítószámot!");
+             System.out.println("Adja meg most!");
+             zip = scanner.nextLine();
+         }
+         return zip;
+     }
+
+     public void writeReport(String zip, Map<Long, Long> numbers){
+        if (numbers == null || numbers.isEmpty()){
+            System.out.println("A(z) " + zip +" irányítószámon nincs érvényes regisztráció.");
+            return;
+        } else {
+            System.out.println("Irányítószám: " + zip);
+            System.out.println("Nem volt oltva: " + numbers.get(0L) + " fő");
+            System.out.println( "Egyszer oltva: " + numbers.get(1L) + " fő");
+            System.out.println("Kétszer oltva: " + numbers.get(2L) + " fő");
+        }
+
+     }
 
     private boolean validateTaj(String str){
         String[] values = str.split("");

@@ -6,6 +6,7 @@ import org.mariadb.jdbc.MariaDbDataSource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Controller {
@@ -53,7 +54,9 @@ public class Controller {
                 //vaccinationFailure();
                 break;
             case "6":
-                validator.generateReport();
+                String zipToFind = validator.generateReport();
+                Map<Long, Long> numbers = covidDao.queryReport(zipToFind);
+                validator.writeReport(zipToFind, numbers);
                 break;
             case "7":
                 System.out.println("Viszontlátásra!");
