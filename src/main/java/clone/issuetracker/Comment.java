@@ -11,7 +11,7 @@ public class Comment {
         this.time = time;
     }
 
-    public Comment(Comment comment){
+    public Comment(Comment comment) {
         text = comment.text;
         time = comment.time;
     }

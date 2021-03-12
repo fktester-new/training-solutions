@@ -17,16 +17,16 @@ public class Issue {
         this.status = status;
     }
 
-    public Issue(Issue issue, CopyMode copyMode){
+    public Issue(Issue issue, CopyMode copyMode) {
         name = issue.name;
         time = issue.time;
         status = issue.status;
-        if (copyMode.equals(CopyMode.WITH_COMMENTS)){
+        if (copyMode.equals(CopyMode.WITH_COMMENTS)) {
             List<Comment> temp = new ArrayList<>();
             for (Comment c : issue.comments) {
                 temp.add(new Comment(c));
             }
-        comments = temp;
+            comments = temp;
         }
     }
 
