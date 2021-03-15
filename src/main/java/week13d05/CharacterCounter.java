@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class CharacterCounter {
 
-    public int countNnumberOfDifferentCharacters(String text){
+    public int countNumberOfDifferentCharacters(String text){
 
         if (text == null || text.isBlank()){
             throw new IllegalArgumentException("The string is empty or null");
