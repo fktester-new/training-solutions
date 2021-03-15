@@ -67,6 +67,7 @@ public class ActivityDao {
                 conn.commit();
             }catch (IllegalArgumentException iae){
                 conn.rollback();
+                throw new IllegalArgumentException("Wrong input, insertion failed!");
             }
         }catch (SQLException sqle){
             throw new IllegalStateException("Cannot connect!", sqle);

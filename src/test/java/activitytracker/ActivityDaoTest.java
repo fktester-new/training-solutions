@@ -27,7 +27,7 @@ class ActivityDaoTest {
             throw new IllegalStateException("Connection failed!", se);
         }
 
-        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
+        Flyway flyway = Flyway.configure().locations("db/migration/orai").dataSource(dataSource).load();
         flyway.clean();
         flyway.migrate();
 
@@ -79,7 +79,6 @@ class ActivityDaoTest {
                 new TrackPoint(LocalDate.of(2021, 2, 23), 67, 34),
                 new TrackPoint(LocalDate.of(2021, 2, 23), 68, 193),
                 new TrackPoint(LocalDate.of(2021, 2, 23), 68, 32)));
-        Activity ac = activityDao.insertActivity(activity);
-        System.out.println(activityDao.selectActivityById(ac.getId()));
+        assertThrows(IllegalArgumentException.class, () -> activityDao.insertActivity(activity));
     }
 }

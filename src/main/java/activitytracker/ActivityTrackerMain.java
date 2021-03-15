@@ -31,7 +31,7 @@ public class ActivityTrackerMain {
 
         ActivityDao activityDao = new ActivityDao(dataSource);
 
-        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
+        Flyway flyway = Flyway.configure().locations("db/migration/orai").dataSource(dataSource).load();
         flyway.clean();
         flyway.migrate();
 
