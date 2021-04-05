@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 public class Transaction {
 
-    private long id;
-    private LocalDateTime time;
-    private String account;
-    private double amount;
+    private final long id;
+    private final LocalDateTime time;
+    private final String account;
+    private final double amount;
 
     public Transaction(long id, LocalDateTime time, String account, double amount) {
         this.id = id;
