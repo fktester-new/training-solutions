@@ -20,7 +20,7 @@ public class TransactionManager {
             List<String> accounts = Files.readAllLines(file);
             for (String s : accounts) {
                 String[] account = s.split(";");
-                BankAccount bankAccount = new BankAccount(account[0], account[1], Integer.parseInt(account[2]));
+                BankAccount bankAccount = new BankAccount(account[0], account[1], Double.parseDouble(account[2]));
                 accountList.add(bankAccount);
         }
         }catch (IOException e) {
