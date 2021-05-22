@@ -7,6 +7,9 @@ import java.util.Set;
 public class Unique {
 
     public boolean isUnique(int[] numbers){
+        if (numbers.length < 2){
+            return true;
+        }
         Map<Integer, Integer> result = new HashMap<>();
         for (int n : numbers) {
            if (result.containsKey(n)){
